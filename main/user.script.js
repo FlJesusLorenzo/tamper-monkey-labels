@@ -8,26 +8,27 @@
 // @icon         https://odoo.factorlibre.com/web_favicon/favicon
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getResourceText
+// @resource css https://raw.githubusercontent.com/FlJesusLorenzo/tamper-monkey-imputar/refs/heads/main/main/css/style.css
+// @updateURL    https://github.com/FlJesusLorenzo/tamper-monkey-labels/raw/refs/heads/main/main/script.user.js
+// @downloadURL  https://github.com/FlJesusLorenzo/tamper-monkey-labels/raw/refs/heads/main/main/script.user.js
 // ==/UserScript==
 (function() {
     'use strict';
-    window.addEventListener('load', function() {
-        // Selecciona el elemento donde quieres añadir el botón
-        const sidebar = document.querySelector('.issuable-sidebar-header div[data-testid="sidebar-todo"]');
-        if (sidebar) {
-            // Crea el botón
-            const button = document.createElement('button');
-            button.classList.add('btn', 'hide-collapsed', 'btn-default', 'btn-sm', 'gl-button');
-            const span = document.createElement('span');
-            span.innerText = 'Tarea en Odoo';
-            button.appendChild(span);
-            // Añade un evento al botón para enviar la URL
-            button.addEventListener('click', function() {
-                const url = window.location.href;
-                window.open("https://odoo.factorlibre.com/gitlab/go-to-task?incoming_url=" + url);
-            });
-            // Añade el botón al sidebar
-            sidebar.appendChild(button);
-        }
-    });
+
+    function createPopup(){}
+    function startObserver() {
+        observer.observe(document.body, { childList: true, subtree: true });
+        if (this) this.removeEventListener("click", startObserver);
+    }
+
+    observer = new MutationObserver(() => {
+        const new_issue_labels = document.querySelector("[data-test-id='sidebar-labels']")
+        const new_div = document.getElementById('label_config')
+
+        if (!(new_issue_labels || issue_labels) || new_div) return;
+        if (new_issue_labels) createPopup()
+        else if (issue_labels) createPopup()
+        
+    })
+    startObserver()
 })();
